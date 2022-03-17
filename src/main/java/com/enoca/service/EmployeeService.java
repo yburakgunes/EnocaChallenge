@@ -1,7 +1,6 @@
 package com.enoca.service;
 
 import com.enoca.dto.request.UpdateEmployeeRequestDto;
-import com.enoca.mapper.EmployeeMapper;
 import com.enoca.repository.IEmployeeRepository;
 import com.enoca.repository.entity.Employee;
 import lombok.RequiredArgsConstructor;
@@ -14,12 +13,14 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class EmployeeService {
     private final IEmployeeRepository employeeRepository;
-    private final EmployeeMapper employeeMapper;
 
 
     public Employee updateEmployee(UpdateEmployeeRequestDto employee){
         Employee dbEmployee = findEmployeeById(employee.getId());
-        dbEmployee = employeeMapper.toUpdateEmployee(employee);
+        dbEmployee.setAge(employee.getAge());
+        dbEmployee.setFirstName(employee.getFirstName());
+        dbEmployee.setLastName(employee.getLastName());
+        dbEmployee.setSalary(employee.getSalary());
         return employeeRepository.save(dbEmployee);
     }
     public String delete(long id){

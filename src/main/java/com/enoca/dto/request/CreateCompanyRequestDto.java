@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 public class CreateCompanyRequestDto {
-    private long name;
+    private String name;
     private String description;
 }

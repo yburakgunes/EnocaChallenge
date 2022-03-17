@@ -6,6 +6,7 @@ import com.enoca.dto.request.UpdateCompanyRequestDto;
 import com.enoca.dto.response.GetCompanyResponseDto;
 import com.enoca.dto.response.GetEmployeeResponseDto;
 import com.enoca.service.CompanyService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,12 +33,15 @@ public class CompanyController {
     public ResponseEntity<String> deleteCompany(@PathVariable long id){
         return ResponseEntity.ok(service.delete(id));
     }
+
+    @Operation(summary = "Sirketi ID sine gore bulmak icin kullanilan metot")
     @GetMapping("/{id}")
     public  ResponseEntity<GetCompanyResponseDto> getCompany(@PathVariable long id){
         return ResponseEntity.ok(new GetCompanyResponseDto(service.findCompanyById(id)));
     }
-    @PostMapping("/{companyId}/{employeeId}")
-    public ResponseEntity<String> addNewEmployee(@PathVariable(name = "companyId")long id,@PathVariable(name = "employeeId") CreateEmployeeRequestDto dto){
+    @Operation(summary = "Yeni calisan eklemek icin kullanilan metot")
+    @PostMapping("/addNewEmployee/{companyId}")
+    public ResponseEntity<String> addNewEmployee(@PathVariable(name = "companyId")long id, @RequestBody CreateEmployeeRequestDto dto){
         return ResponseEntity.ok(service.addNewEmployee(id,dto));
     }
     @PostMapping("/listAllEmployees/{id}")

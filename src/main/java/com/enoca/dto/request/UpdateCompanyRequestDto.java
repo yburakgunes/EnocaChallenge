@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class UpdateCompanyRequestDto {
     private long id;
-    private long name;
+    private String name;
     private String description;
 }

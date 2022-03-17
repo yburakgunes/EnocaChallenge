@@ -3,8 +3,6 @@ package com.enoca.service;
 import com.enoca.dto.request.CreateCompanyRequestDto;
 import com.enoca.dto.request.CreateEmployeeRequestDto;
 import com.enoca.dto.request.UpdateCompanyRequestDto;
-import com.enoca.mapper.CompanyMapper;
-import com.enoca.mapper.EmployeeMapper;
 import com.enoca.repository.ICompanyRepository;
 import com.enoca.repository.IEmployeeRepository;
 import com.enoca.repository.entity.Company;
@@ -22,19 +20,21 @@ public class CompanyService {
 
     private final ICompanyRepository companyRepository;
     private final IEmployeeRepository employeeRepository;
-    private final CompanyMapper companyMapper;
-    private final EmployeeMapper employeeMapper;
 
 
     public Company saveCompany(CreateCompanyRequestDto company) {
-        Company dbCompany = new Company();
-        dbCompany = companyMapper.toCreateCompany(company);
-        return dbCompany;
+        Company dbCompany = Company.builder()
+                .name(company.getName())
+                .description(company.getDescription())
+                .build();
+        return companyRepository.save(dbCompany);
     }
 
     public Company updateCompany(UpdateCompanyRequestDto company) {
         Company dbCompany = findCompanyById(company.getId());
-        dbCompany = companyMapper.toUpdateCompany(company);
+        dbCompany.setName(company.getName());
+        dbCompany.setDescription(company.getDescription());
+
         return companyRepository.save(dbCompany);
 
     }
@@ -52,7 +52,12 @@ public class CompanyService {
     }
     public String addNewEmployee (long id, CreateEmployeeRequestDto dto){
         Company company = companyRepository.findById(id).get();
-        Employee employee = employeeMapper.toCreateEmployee(dto);
+        Employee employee = Employee.builder()
+                .age(dto.getAge())
+                .firstName(dto.getFirstName())
+                .lastName(dto.getLastName())
+                .salary(dto.getSalary())
+                .build();
         employee.setCompany(company);
         company.getEmployeeList().add(employee);
         employeeRepository.save(employee);
